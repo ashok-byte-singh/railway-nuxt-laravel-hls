@@ -6,6 +6,16 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\VideoController;
 use App\Models\Experiment;
 
+// use Illuminate\Support\Facades\Route;
+
+Route::get('/volume-check', function () {
+    return response()->json([
+        'exists'   => is_dir('/data'),
+        'writable' => is_writable('/data'),
+        'content'  => scandir('/data'),
+    ]);
+});
+
 Route::middleware(['web'])->group(function () {
     Route::get('/cf-test', function () {
         return \App\Services\CloudFrontCookieSigner::sign('experiments/1', 60);
