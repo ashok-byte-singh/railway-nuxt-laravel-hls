@@ -24,9 +24,9 @@ Route::get('/volume-check', function () {
 });
 
 Route::middleware(['web'])->group(function () {
-    Route::get('/cf-test', function () {
-        return \App\Services\CloudFrontCookieSigner::sign('experiments/1', 60);
-    });
+    // Route::get('/cf-test', function () {
+    //     return \App\Services\CloudFrontCookieSigner::sign('experiments/1', 60);
+    // });
     
 
     // ---------- AUTH ----------
