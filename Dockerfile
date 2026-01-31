@@ -9,6 +9,8 @@ RUN apk add --no-cache \
 # PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring bcmath gd opcache
 
+RUN mkdir -p /var/run/php && chown -R www-data:www-data /var/run/php
+
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
