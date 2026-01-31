@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\VideoController;
+use App\Models\Experiment;
+
+Route::middleware(['web'])->group(function () {
+    Route::get('/cf-test', function () {
+        return \App\Services\CloudFrontCookieSigner::sign('experiments/1', 60);
+    });
+    
+
+    // ---------- AUTH ----------
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+
+        Route::get('/me', fn (Request $r) => $r->user());
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+        // ---------- EXPERIMENT LIST ----------
+        Route::get('/experiments', function () {
+            return Experiment::where('is_active', true)->get();
+        });
+
+        // ---------- EXPERIMENT DETAIL ----------
+        Route::get('/experiments/{experiment}', function (Experiment $experiment) {
+            return response()->json([
+                'id'        => $experiment->id,
+                'title'     => $experiment->title,
+                'aim'       => $experiment->aim,
+                'objective' => $experiment->objective,
+                'procedure' => $experiment->procedure,
+                'video_url' => $experiment->video_url, // relative path only
+            ]);
+        });
+
+        // ---------- VIDEO (SETS CLOUDFRONT COOKIES) ----------
+        Route::get('/video/{experiment}', [VideoController::class, 'getVideo']);
+    });
+});

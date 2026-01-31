@@ -1,0 +1,14 @@
+# Laravel
+laravel/vendor
+laravel/.env
+laravel/storage/*.log
+
+# Nuxt
+nuxt/node_modules
+nuxt/.output
+
+# OS
+.DS_Store
+
+# Optional (if not used)
+docker/
