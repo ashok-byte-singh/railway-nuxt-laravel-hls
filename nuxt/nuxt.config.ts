@@ -1,29 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: true,
+
   nitro: {
     preset: 'node-server'
   },
+
   runtimeConfig: {
     public: {
-      apiBase: 'https://local.asd.com',
-    },
+      apiBase: '/api'
+    }
   },
 
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
-  },
-
-  // 🔥 ADD THIS
-  vite: {
-    server: {
-      allowedHosts: [
-        'local.asd.com',
-        'api.local.asd.com',
-        'cdn.local.asd.com',
-      ],
-    },
   },
 })
