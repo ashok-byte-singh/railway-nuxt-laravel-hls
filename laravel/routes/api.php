@@ -8,6 +8,13 @@ use App\Models\Experiment;
 
 // use Illuminate\Support\Facades\Route;
 
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok'
+    ]);
+});
+
+
 Route::get('/volume-check', function () {
     return response()->json([
         'exists'   => is_dir('/data'),
