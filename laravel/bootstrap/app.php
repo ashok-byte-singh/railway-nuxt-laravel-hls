@@ -43,11 +43,11 @@ return Application::configure(basePath: dirname(__DIR__))
         /**
          * 🔥 DO NOT encrypt CloudFront cookies
          */
-        $middleware->encryptCookies(except: [
-            'CloudFront-Policy',
-            'CloudFront-Signature',
-            'CloudFront-Key-Pair-Id',
-        ]);
+        // $middleware->encryptCookies(except: [
+        //     'CloudFront-Policy',
+        //     'CloudFront-Signature',
+        //     'CloudFront-Key-Pair-Id',
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
 
