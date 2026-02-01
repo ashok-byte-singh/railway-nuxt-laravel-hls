@@ -18,41 +18,28 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
 
         /**
-         * 🔥 GLOBAL CORS (must run early)
+         * 🌍 Global CORS
          */
         $middleware->use([
             HandleCors::class,
         ]);
 
-          /**
-     * 🔥 SANCTUM (THIS IS MISSING)
-     */
-    $middleware->api([
-        EnsureFrontendRequestsAreStateful::class,
-    ]);
-
+        /**
+         * 🔐 Sanctum SPA middleware (REQUIRED)
+         */
+        $middleware->api([
+            EnsureFrontendRequestsAreStateful::class,
+        ]);
 
         /**
-         * ✅ CSRF exceptions for API auth
+         * 🍪 Default cookie encryption (DO NOT REMOVE)
          */
-        // $middleware->validateCsrfTokens(except: [
-        //     'api/login',
-        //     'api/logout',
-        // ]);
-
-        /**
-         * 🔥 DO NOT encrypt CloudFront cookies
-         */
-        // $middleware->encryptCookies(except: [
-        //     'CloudFront-Policy',
-        //     'CloudFront-Signature',
-        //     'CloudFront-Key-Pair-Id',
-        // ]);
+        $middleware->encryptCookies();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
 
         /**
-         * ✅ Always return JSON for API auth errors
+         * Return JSON for API auth errors
          */
         $exceptions->render(function (
             AuthenticationException $e,
@@ -60,7 +47,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'message' => 'Unauthenticated'
+                    'message' => 'Unauthenticated',
                 ], 401);
             }
         });
