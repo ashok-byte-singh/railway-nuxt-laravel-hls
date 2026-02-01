@@ -35,10 +35,10 @@ return Application::configure(basePath: dirname(__DIR__))
         /**
          * ✅ CSRF exceptions for API auth
          */
-        $middleware->validateCsrfTokens(except: [
-            'api/login',
-            'api/logout',
-        ]);
+        // $middleware->validateCsrfTokens(except: [
+        //     'api/login',
+        //     'api/logout',
+        // ]);
 
         /**
          * 🔥 DO NOT encrypt CloudFront cookies
