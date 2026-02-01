@@ -15,11 +15,11 @@ use App\Models\Experiment;
 Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
 Route::get('/__migrate', function (Request $request) {
-    // abort_unless(
-    //     app()->environment('production')
-    //     && $request->query('key') === env('DEPLOY_SECRET'),
-    //     403
-    // );
+    abort_unless(
+        app()->environment('production')
+        && $request->query('key') === env('DEPLOY_SECRET'),
+        403
+    );
 
     \Artisan::call('migrate', ['--force' => true]);
 
@@ -27,11 +27,11 @@ Route::get('/__migrate', function (Request $request) {
 });
 
 Route::get('/__seed', function (Request $request) {
-    // abort_unless(
-    //     app()->environment('production')
-    //     && $request->query('key') === env('DEPLOY_SECRET'),
-    //     403
-    // );
+    abort_unless(
+        app()->environment('production')
+        && $request->query('key') === env('DEPLOY_SECRET'),
+        403
+    );
 
     \Artisan::call('db:seed', ['--force' => true]);
 
