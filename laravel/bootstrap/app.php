@@ -31,6 +31,9 @@ return Application::configure(basePath: dirname(__DIR__))
             EnsureFrontendRequestsAreStateful::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+        ]);
         /**
          * 🍪 Default cookie encryption (DO NOT REMOVE)
          */

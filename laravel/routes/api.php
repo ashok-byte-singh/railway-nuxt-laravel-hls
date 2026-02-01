@@ -6,26 +6,13 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\VideoController;
 use App\Models\Experiment;
 
-// use Illuminate\Support\Facades\Route;
+/*
+|--------------------------------------------------------------------------
+| Utility / Internal
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/__seed', function () {
-    abort_unless(app()->environment('local'), 403);
-    \Artisan::call('db:seed', ['--force' => true]);
-    return 'seeded';
-});
-
-Route::get('/__migrate', function () {
-    \Artisan::call('migrate', ['--force' => true]);
-    return 'migrated';
-});
-
-
-Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok'
-    ]);
-});
-
+Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
 Route::get('/volume-check', function () {
     return response()->json([
@@ -35,38 +22,39 @@ Route::get('/volume-check', function () {
     ]);
 });
 
-Route::middleware(['web'])->group(function () {
-    // Route::get('/cf-test', function () {
-    //     return \App\Services\CloudFrontCookieSigner::sign('experiments/1', 60);
-    // });
-    
+/*
+|--------------------------------------------------------------------------
+| Auth (NO web middleware)
+|--------------------------------------------------------------------------
+*/
 
-    // ---------- AUTH ----------
-    Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-    Route::middleware('auth:sanctum')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Authenticated API
+|--------------------------------------------------------------------------
+*/
 
-        Route::get('/me', fn (Request $r) => $r->user());
-        Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function () {
 
-        // ---------- EXPERIMENT LIST ----------
-        Route::get('/experiments', function () {
-            return Experiment::where('is_active', true)->get();
-        });
+    Route::get('/me', fn (Request $r) => $r->user());
 
-        // ---------- EXPERIMENT DETAIL ----------
-        Route::get('/experiments/{experiment}', function (Experiment $experiment) {
-            return response()->json([
-                'id'        => $experiment->id,
-                'title'     => $experiment->title,
-                'aim'       => $experiment->aim,
-                'objective' => $experiment->objective,
-                'procedure' => $experiment->procedure,
-                'video_url' => $experiment->video_url, // relative path only
-            ]);
-        });
-
-        // ---------- VIDEO (SETS CLOUDFRONT COOKIES) ----------
-        Route::get('/video/{experiment}', [VideoController::class, 'getVideo']);
+    Route::get('/experiments', function () {
+        return Experiment::where('is_active', true)->get();
     });
+
+    Route::get('/experiments/{experiment}', function (Experiment $experiment) {
+        return response()->json([
+            'id'        => $experiment->id,
+            'title'     => $experiment->title,
+            'aim'       => $experiment->aim,
+            'objective' => $experiment->objective,
+            'procedure' => $experiment->procedure,
+            'video_url' => $experiment->video_url,
+        ]);
+    });
+
+    Route::get('/video/{experiment}', [VideoController::class, 'getVideo']);
 });
