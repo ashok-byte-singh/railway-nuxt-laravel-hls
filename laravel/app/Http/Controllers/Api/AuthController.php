@@ -2,67 +2,42 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
 class AuthController extends Controller
 {
-    // public function login(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required',
-    //     ]);
-
-    //     $user = User::where('email', $request->email)->first();
-
-    //     if (! $user || ! Hash::check($request->password, $user->password)) {
-    //         return response()->json(['message' => 'Invalid credentials'], 401);
-    //     }
-
-    //     // revoke old tokens
-    //     $user->tokens()->delete();
-
-    //     // Sanctum token (API auth)
-    //     $token = $user->createToken('spa')->plainTextToken;
-
-    //     return response()->json([
-    //         'user' => $user,
-    //         'token' => $token,
-    //     ]);
-    // }
-
-    // public function logout(Request $request)
-    // {
-    //     $request->user()->currentAccessToken()->delete();
-
-    //     return response()->json(['message' => 'Logged out']);
-    // }
     public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+    {
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-    if (! Auth::attempt($request->only('email', 'password'))) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        // 🔑 MUST use web guard for Sanctum SPA
+        if (! Auth::guard('web')->attempt($credentials)) {
+            throw ValidationException::withMessages([
+                'email' => ['Invalid credentials.'],
+            ]);
+        }
+
+        // 🔁 Regenerate session (important)
+        $request->session()->regenerate();
+
+        return response()->json([
+            'user' => $request->user(),
+        ]);
     }
 
-    $request->session()->regenerate();
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
 
-    return response()->json([
-        'user' => Auth::user(),
-    ]);
-}
-public function logout(Request $request)
-{
-    // Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    return response()->json(['message' => 'Logged out']);
-}
+        return response()->json(['ok' => true]);
+    }
 }
