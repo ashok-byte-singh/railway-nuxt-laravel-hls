@@ -8,6 +8,13 @@ use App\Models\Experiment;
 
 // use Illuminate\Support\Facades\Route;
 
+
+Route::get('/__migrate', function () {
+    \Artisan::call('migrate', ['--force' => true]);
+    return 'migrated';
+});
+
+
 Route::get('/health', function () {
     return response()->json([
         'status' => 'ok'
