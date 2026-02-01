@@ -14,28 +14,14 @@ use App\Models\Experiment;
 
 Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
-Route::get('/__migrate', function (Request $request) {
-    // abort_unless(
-    //     app()->environment('production')
-    //     && $request->query('key') === env('DEPLOY_SECRET'),
-    //     403
-    // );
-
+Route::get('/__migrate', function () {
     \Artisan::call('migrate', ['--force' => true]);
-
-    return response()->json(['status' => 'migrated']);
+    return 'migrated';
 });
 
-Route::get('/__seed', function (Request $request) {
-    // abort_unless(
-    //     app()->environment('production')
-    //     && $request->query('key') === env('DEPLOY_SECRET'),
-    //     403
-    // );
-
+Route::get('/__seed', function () {
     \Artisan::call('db:seed', ['--force' => true]);
-
-    return response()->json(['status' => 'seeded']);
+    return 'seeded';
 });
 
 
