@@ -14,6 +14,32 @@ use App\Models\Experiment;
 
 Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
+Route::get('/__migrate', function (Request $request) {
+    abort_unless(
+        app()->environment('production')
+        && $request->query('key') === env('DEPLOY_SECRET'),
+        403
+    );
+
+    \Artisan::call('migrate', ['--force' => true]);
+
+    return response()->json(['status' => 'migrated']);
+});
+
+Route::get('/__seed', function (Request $request) {
+    abort_unless(
+        app()->environment('production')
+        && $request->query('key') === env('DEPLOY_SECRET'),
+        403
+    );
+
+    \Artisan::call('db:seed', ['--force' => true]);
+
+    return response()->json(['status' => 'seeded']);
+});
+
+
+
 Route::get('/volume-check', function () {
     return response()->json([
         'exists'   => is_dir('/data'),
