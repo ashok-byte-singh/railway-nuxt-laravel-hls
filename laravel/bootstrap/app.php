@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Middleware\HandleCors;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,6 +23,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->use([
             HandleCors::class,
         ]);
+
+          /**
+     * 🔥 SANCTUM (THIS IS MISSING)
+     */
+    $middleware->api([
+        EnsureFrontendRequestsAreStateful::class,
+    ]);
+
 
         /**
          * ✅ CSRF exceptions for API auth
