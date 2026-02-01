@@ -17,7 +17,7 @@ class VideoController extends Controller
         $relativePath = ltrim($experiment->video_url, '/');
 
         return response()->json([
-            'playlist' => url('/hls/' . $relativePath),
+            'playlist' => secure_url('/hls/' . $relativePath),
             'type' => 'public_hls',
         ]);
     }
