@@ -36,7 +36,7 @@ const videoSrc = ref(null)
 const { data: experiment, pending, error } = await useAsyncData(
   `experiment-${route.params.id}`,
  async () =>
-    await $fetch(`${apiBase}/api/experiments/${route.params.id}`, {
+    await $fetch(`${apiBase}/experiments/${route.params.id}`, {
       credentials: 'include',
       headers: { Accept: 'application/json' }
     }),
@@ -65,7 +65,7 @@ watch(
   async (val) => {
     console.log('VIDEO URL FROM API:', val)
 
-    const res = await $fetch(`${apiBase}/api/video/${route.params.id}`, {
+    const res = await $fetch(`${apiBase}/video/${route.params.id}`, {
       credentials: 'include'
     })
 
