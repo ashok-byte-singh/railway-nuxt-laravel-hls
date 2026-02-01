@@ -8,6 +8,11 @@ use App\Models\Experiment;
 
 // use Illuminate\Support\Facades\Route;
 
+Route::get('/__seed', function () {
+    abort_unless(app()->environment('local'), 403);
+    \Artisan::call('db:seed', ['--force' => true]);
+    return 'seeded';
+});
 
 Route::get('/__migrate', function () {
     \Artisan::call('migrate', ['--force' => true]);
