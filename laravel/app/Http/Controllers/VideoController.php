@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Experiment;
@@ -10,23 +9,26 @@ class VideoController extends Controller
     public function getVideo(Experiment $experiment)
     {
         if (! $experiment->video_url) {
-            abort(404, 'Video not available');
+            abort(404);
         }
 
-        // Stored in DB:
-        // experiments/1/index.m3u8
-        // $path = ltrim($experiment->video_url, '/');
+        // Example: experiments/2/video2.m3u8
+        $path = ltrim($experiment->video_url, '/');
 
-        // Generate signed MinIO URL
-        $signedUrl = Storage::disk('s3')->temporaryUrl(
-            $path,
-            now()->addMinutes(15)
+        $playlist = Storage::disk('s3')->get($path);
+
+        // Rewrite .ts → Laravel proxy route
+        $playlist = preg_replace_callback(
+            '/^(.+\.ts)$/m',
+            function ($m) use ($experiment) {
+                return url("/hls/segment/{$experiment->id}/{$m[1]}");
+            },
+            $playlist
         );
 
-        return response()->json([
-            'playlist' => $signedUrl,
-            'expires_in' => 900, // seconds
-            'type' => 'signed_hls',
+        return response($playlist, 200, [
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Cache-Control' => 'no-store',
         ]);
     }
 }

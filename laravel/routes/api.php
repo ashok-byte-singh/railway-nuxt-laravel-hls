@@ -7,7 +7,6 @@ use App\Http\Controllers\VideoController;
 use App\Models\Experiment;
 use App\Http\Controllers\Api\AuthController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Utility / Internal
@@ -54,6 +53,25 @@ Route::middleware(['web'])->group(function () {
     
         Route::get('/me', fn (Request $r) => $r->user())
             ->middleware('auth:sanctum');
+            Route::get('/hls/segment/{experiment}/{file}', function (
+                Experiment $experiment,
+                string $file
+            ) {
+                $path = "experiments/{$experiment->id}/{$file}";
+            
+                abort_unless(Storage::disk('s3')->exists($path), 404);
+            
+                $stream = Storage::disk('s3')->readStream($path);
+            
+                return response()->stream(function () use ($stream) {
+                    fpassthru($stream);
+                }, 200, [
+                    'Content-Type' => 'video/mp2t',
+                    'Cache-Control' => 'no-store',
+                ]);
+            });
+            
+
     });
 Route::middleware('auth:sanctum')->group(function () {
 
