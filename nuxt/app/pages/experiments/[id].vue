@@ -64,24 +64,25 @@ watch(
   () => experiment.value?.video_url,
   async (val) => {
     if (!val) return
-    console.log('VIDEO URL FROM API:', val)
 
-    // const res = await $fetch(`${apiBase}/video/${route.params.id}`, {
-    //   credentials: 'include'
-    // })
+    const playlistText = await $fetch(
+      `${apiBase}/video/${route.params.id}`,
+      {
+        credentials: 'include',
+        responseType: 'text'
+      }
+    )
 
-    // console.log('SIGNED PLAYLIST:', res.playlist)
+    // ✅ CREATE A BLOB URL
+    const blob = new Blob([playlistText], {
+      type: 'application/vnd.apple.mpegurl'
+    })
 
-    // videoSrc.value = res.playlist
-    const playlist = await $fetch(`${apiBase}/video/${route.params.id}`, {
-  credentials: 'include',
-  responseType: 'text'
-})
-
-videoSrc.value = playlist
+    videoSrc.value = URL.createObjectURL(blob)
   },
   { immediate: true }
 )
+
 
 
 // breadcrumb
