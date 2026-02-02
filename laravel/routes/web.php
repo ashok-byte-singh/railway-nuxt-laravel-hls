@@ -22,6 +22,7 @@ Route::get(
     [VideoController::class, 'segment']
 )->where('file', '.*');
 
+Route::middleware(['web'])->group(function () {        
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:sanctum');
@@ -45,3 +46,4 @@ Route::get('/me', fn (Request $r) => $r->user())
             ['Content-Type' => 'video/mp2t']
         );
     });
+});
