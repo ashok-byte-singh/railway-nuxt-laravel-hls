@@ -72,6 +72,10 @@ Route::middleware(['web'])->group(function () {
             });
             
                
+Route::get(
+    '/hls/segment/{experiment}/{file}',
+    [VideoController::class, 'segment']
+)->where('file', '.*');
             
 
     });

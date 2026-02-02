@@ -3,24 +3,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Experiment;
 use Illuminate\Support\Facades\Storage;
-
+use Symfony\Component\HttpFoundation\StreamedResponse;
 class VideoController extends Controller
 {
-    public function getVideo(Experiment $experiment)
+   
+    public function segment(int $experiment, string $file)
 {
-    $path = ltrim($experiment->video_url, '/'); // experiments/1/video.m3u8
+    $path = "experiments/{$experiment}/{$file}";
 
-    $playlist = Storage::disk('s3')->get($path);
+    if (!Storage::disk('s3')->exists($path)) {
+        abort(404);
+    }
 
-    $playlist = preg_replace_callback(
-        '/^(.+\.ts)$/m',
-        fn ($m) => url("/hls/segment/{$experiment->id}/{$m[1]}"),
-        $playlist
-    );
-
-    return response($playlist, 200, [
-        'Content-Type' => 'application/vnd.apple.mpegurl',
-        'Cache-Control' => 'no-store',
+    return new StreamedResponse(function () use ($path) {
+        $stream = Storage::disk('s3')->readStream($path);
+        fpassthru($stream);
+        fclose($stream);
+    }, 200, [
+        'Content-Type'              => 'video/mp2t',
+        'Cache-Control'             => 'no-store',
+        'Access-Control-Allow-Origin'      => config('app.url'),
+        'Access-Control-Allow-Credentials' => 'true',
     ]);
 }
 
