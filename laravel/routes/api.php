@@ -52,7 +52,30 @@ Route::get('/minio-test', function () {
 */
 // Route::middleware(['web'])->group(function () {
 
-                  
+        // Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/logout', [AuthController::class, 'logout'])
+            ->middleware('auth:sanctum');
+    
+        Route::get('/me', fn (Request $r) => $r->user())
+            ->middleware('auth:sanctum');
+           
+            Route::get('/hls/segment/{experiment}/{segment}', function (
+                Experiment $experiment,
+                string $segment
+            ) {
+                $path = "experiments/{$experiment->id}/{$segment}";
+            
+                if (!Storage::disk('s3')->exists($path)) {
+                    abort(404, 'Segment not found in bucket');
+                }
+            
+                return response(
+                    Storage::disk('s3')->get($path),
+                    200,
+                    ['Content-Type' => 'video/mp2t']
+                );
+            });
+            
                
             
 

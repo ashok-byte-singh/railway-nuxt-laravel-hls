@@ -14,7 +14,7 @@ export const useAuth = () => {
   // 👤 Fetch authenticated user
   const fetchUser = async () => {
     try {
-      user.value = await $fetch('/me', {
+      user.value = await $fetch('/api/me', {
         credentials: 'include',
         headers: { Accept: 'application/json' }
       })
@@ -52,7 +52,7 @@ export const useAuth = () => {
 
     // backend cleanup (non-blocking)
     try {
-      await $fetch('/logout', {
+      await $fetch('/api/logout', {
         method: 'POST',
         credentials: 'include'
       })
