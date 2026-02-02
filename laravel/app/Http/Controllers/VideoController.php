@@ -8,16 +8,10 @@ class VideoController extends Controller
 {
     public function getVideo(Experiment $experiment)
     {
-        if (! $experiment->video_url) {
-            abort(404);
-        }
-
-        // Example: experiments/2/video2.m3u8
         $path = ltrim($experiment->video_url, '/');
 
         $playlist = Storage::disk('s3')->get($path);
 
-        // Rewrite .ts → Laravel proxy route
         $playlist = preg_replace_callback(
             '/^(.+\.ts)$/m',
             function ($m) use ($experiment) {

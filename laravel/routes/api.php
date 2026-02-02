@@ -53,23 +53,25 @@ Route::middleware(['web'])->group(function () {
     
         Route::get('/me', fn (Request $r) => $r->user())
             ->middleware('auth:sanctum');
-            Route::get('/hls/segment/{experiment}/{file}', function (
+           
+            Route::get('/hls/segment/{experiment}/{segment}', function (
                 Experiment $experiment,
-                string $file
+                string $segment
             ) {
-                $path = "experiments/{$experiment->id}/{$file}";
+                $path = "experiments/{$experiment->id}/{$segment}";
             
                 abort_unless(Storage::disk('s3')->exists($path), 404);
             
-                $stream = Storage::disk('s3')->readStream($path);
-            
-                return response()->stream(function () use ($stream) {
-                    fpassthru($stream);
-                }, 200, [
-                    'Content-Type' => 'video/mp2t',
-                    'Cache-Control' => 'no-store',
-                ]);
+                return response(
+                    Storage::disk('s3')->get($path),
+                    200,
+                    [
+                        'Content-Type' => 'video/mp2t',
+                        'Cache-Control' => 'no-store',
+                    ]
+                );
             });
+               
             
 
     });
@@ -92,5 +94,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
 
-    Route::get('/video/{experiment}', [VideoController::class, 'getVideo']);
+    // Route::get('/video/{experiment}', [VideoController::class, 'getVideo']);
 });
+Route::get('/video/{experiment}', [VideoController::class, 'getVideo']);
+
