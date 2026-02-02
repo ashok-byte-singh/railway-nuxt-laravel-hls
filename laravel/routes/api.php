@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\VideoController;
 use App\Models\Experiment;
@@ -24,24 +25,30 @@ Route::get('/__seed', function () {
     return 'seeded';
 });
 
+/*
+|--------------------------------------------------------------------------
+| MinIO test (temporary)
+|--------------------------------------------------------------------------
+*/
 
+Route::get('/minio-test', function () {
+    Storage::disk('s3')->put(
+        'test/hello.txt',
+        'MinIO working 🎉'
+    );
 
-Route::get('/volume-check', function () {
-    return response()->json([
-        'exists'   => is_dir('/data'),
-        'writable' => is_writable('/data'),
-        'content'  => scandir('/data'),
-    ]);
+    return response()->json(['status' => 'ok']);
 });
 
 /*
 |--------------------------------------------------------------------------
-| Auth (NO web middleware)
+| Auth (API ONLY – no web middleware)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['web'])->group(function () {
+
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth:sanctum');
 
 /*
 |--------------------------------------------------------------------------
@@ -69,5 +76,4 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/video/{experiment}', [VideoController::class, 'getVideo']);
-});
 });

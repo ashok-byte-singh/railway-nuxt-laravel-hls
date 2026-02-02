@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Experiment;
+use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
 {
@@ -12,13 +13,20 @@ class VideoController extends Controller
             abort(404, 'Video not available');
         }
 
-        // video_url example stored in DB:
+        // Stored in DB:
         // experiments/1/index.m3u8
-        $relativePath = ltrim($experiment->video_url, '/');
+        $path = ltrim($experiment->video_url, '/');
+
+        // Generate signed MinIO URL
+        $signedUrl = Storage::disk('s3')->temporaryUrl(
+            $path,
+            now()->addMinutes(15)
+        );
 
         return response()->json([
-            'playlist' => secure_url('/hls/' . $relativePath),
-            'type' => 'public_hls',
+            'playlist' => $signedUrl,
+            'expires_in' => 900, // seconds
+            'type' => 'signed_hls',
         ]);
     }
 }
