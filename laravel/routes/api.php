@@ -61,18 +61,16 @@ Route::middleware(['web'])->group(function () {
                 $path = "experiments/{$experiment->id}/{$segment}";
             
                 if (!Storage::disk('s3')->exists($path)) {
-                    abort(404, 'Segment not found');
+                    abort(404, 'Segment not found in bucket');
                 }
             
                 return response(
                     Storage::disk('s3')->get($path),
                     200,
-                    [
-                        'Content-Type' => 'video/mp2t',
-                        'Cache-Control' => 'no-store',
-                    ]
+                    ['Content-Type' => 'video/mp2t']
                 );
             });
+            
                
             
 
