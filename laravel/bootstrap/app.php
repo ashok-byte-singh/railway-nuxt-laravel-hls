@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Middleware\HandleCors;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
          * 🌍 Global CORS
          */
         $middleware->use([
+            TrustProxies::class,
             HandleCors::class,
         ]);
 
