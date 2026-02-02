@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\VideoController;
 use App\Models\Experiment;
 
@@ -42,17 +41,7 @@ Route::get('/minio-test', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Auth (API ONLY – no web middleware)
-|--------------------------------------------------------------------------
-*/
-
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth:sanctum');
-
-/*
-|--------------------------------------------------------------------------
-| Authenticated API
+| Authenticated API (COOKIE-BASED via Sanctum)
 |--------------------------------------------------------------------------
 */
 
