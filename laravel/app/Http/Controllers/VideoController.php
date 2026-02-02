@@ -21,13 +21,12 @@ class VideoController extends Controller
 
         // 3️⃣ Rewrite TS URLs → Laravel proxy
         $playlist = preg_replace_callback(
-            '/\n([^#\n]+\.ts)/',
+            '/^(?!#)(.+\.ts)$/m',
             function ($m) use ($experiment) {
-                return "\n" . url("/hls/segment/{$experiment->id}/{$m[1]}");
+                return url("/hls/segment/{$experiment->id}/" . trim($m[1]));
             },
             $playlist
         );
-
         // 4️⃣ Return HLS playlist
         return response($playlist, 200, [
             'Content-Type' => 'application/vnd.apple.mpegurl',
