@@ -63,15 +63,22 @@ const { data: experiment, pending, error } = await useAsyncData(
 watch(
   () => experiment.value?.video_url,
   async (val) => {
+    if (!val) return
     console.log('VIDEO URL FROM API:', val)
 
-    const res = await $fetch(`${apiBase}/video/${route.params.id}`, {
-      credentials: 'include'
-    })
+    // const res = await $fetch(`${apiBase}/video/${route.params.id}`, {
+    //   credentials: 'include'
+    // })
 
-    console.log('SIGNED PLAYLIST:', res.playlist)
+    // console.log('SIGNED PLAYLIST:', res.playlist)
 
-    videoSrc.value = res.playlist
+    // videoSrc.value = res.playlist
+    const playlist = await $fetch(`${apiBase}/video/${route.params.id}`, {
+  credentials: 'include',
+  responseType: 'text'
+})
+
+videoSrc.value = playlist
   },
   { immediate: true }
 )
