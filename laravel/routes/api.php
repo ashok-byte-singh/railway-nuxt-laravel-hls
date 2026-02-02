@@ -60,7 +60,9 @@ Route::middleware(['web'])->group(function () {
             ) {
                 $path = "experiments/{$experiment->id}/{$segment}";
             
-                abort_unless(Storage::disk('s3')->exists($path), 404);
+                if (!Storage::disk('s3')->exists($path)) {
+                    abort(404, 'Segment not found');
+                }
             
                 return response(
                     Storage::disk('s3')->get($path),

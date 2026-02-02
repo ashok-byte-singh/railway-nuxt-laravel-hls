@@ -14,9 +14,7 @@ class VideoController extends Controller
 
         $playlist = preg_replace_callback(
             '/^(.+\.ts)$/m',
-            function ($m) use ($experiment) {
-                return url("/hls/segment/{$experiment->id}/{$m[1]}");
-            },
+            fn ($m) => url("/hls/segment/{$experiment->id}/{$m[1]}"),
             $playlist
         );
 
