@@ -32,7 +32,7 @@ export const useAuth = () => {
     // 🔥 REQUIRED FOR SANCTUM
     await initCsrf()
 
-    await $fetch('/api/login', {
+    await $fetch('/login', {
       method: 'POST',
       credentials: 'include',
       headers: { Accept: 'application/json' },
@@ -52,7 +52,7 @@ export const useAuth = () => {
 
     // backend cleanup (non-blocking)
     try {
-      await $fetch('/api/logout', {
+      await $fetch('/logout', {
         method: 'POST',
         credentials: 'include'
       })
