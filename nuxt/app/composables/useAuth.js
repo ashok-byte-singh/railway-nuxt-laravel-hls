@@ -48,7 +48,7 @@ export const useAuth = () => {
     user.value = null
     authLoaded.value = true
 
-    await navigateTo('/api/login', { replace: true })
+    await navigateTo('/login', { replace: true })
 
     // backend cleanup (non-blocking)
     try {
