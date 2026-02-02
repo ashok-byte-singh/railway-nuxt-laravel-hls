@@ -40,6 +40,11 @@ Route::get('/minio-test', function () {
     return response()->json(['status' => 'ok']);
 });
 
+Route::get(
+    '/hls/segment/{experiment}/{file}',
+    [VideoController::class, 'segment']
+)->where('file', '.*');
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated API (COOKIE-BASED via Sanctum)
@@ -72,10 +77,6 @@ Route::middleware(['web'])->group(function () {
             });
             
                
-Route::get(
-    '/hls/segment/{experiment}/{file}',
-    [VideoController::class, 'segment']
-)->where('file', '.*');
             
 
     });
