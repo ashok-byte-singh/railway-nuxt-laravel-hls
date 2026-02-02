@@ -15,7 +15,6 @@ const initPlayer = () => {
   // Safari / iOS
   if (videoRef.value.canPlayType('application/vnd.apple.mpegurl')) {
     videoRef.value.src = props.src
-    videoRef.value.crossOrigin = 'use-credentials'
     videoRef.value.load()
     videoRef.value.play().catch(() => {})
     return
@@ -25,10 +24,8 @@ const initPlayer = () => {
   if (Hls.isSupported()) {
     hls = new Hls({
       enableWorker: true,
-      lowLatencyMode: false,
-      xhrSetup(xhr) {
-        xhr.withCredentials = true
-      }
+      lowLatencyMode: false
+      // ❌ NO xhrSetup
     })
 
     hls.loadSource(props.src)
@@ -57,7 +54,6 @@ onBeforeUnmount(() => {
     controls
     playsinline
     preload="metadata"
-    crossorigin="use-credentials"
     controlsList="nodownload noplaybackrate"
     disablePictureInPicture
     style="width:100%; max-height:70vh; background:black;"
