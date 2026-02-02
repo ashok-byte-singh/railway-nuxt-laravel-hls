@@ -14,7 +14,7 @@ export const useAuth = () => {
   // 👤 Fetch authenticated user
   const fetchUser = async () => {
     try {
-      user.value = await $fetch('/api/me', {
+      user.value = await $fetch('/me', {
         credentials: 'include',
         headers: { Accept: 'application/json' }
       })
