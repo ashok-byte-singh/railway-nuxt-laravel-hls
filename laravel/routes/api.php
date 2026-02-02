@@ -50,7 +50,7 @@ Route::get('/minio-test', function () {
 | Authenticated API (COOKIE-BASED via Sanctum)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['web'])->group(function () {
+// Route::middleware(['web'])->group(function () {
 
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/logout', [AuthController::class, 'logout'])
@@ -79,7 +79,7 @@ Route::middleware(['web'])->group(function () {
                
             
 
-    });
+    // });
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/me', fn (Request $r) => $r->user());
