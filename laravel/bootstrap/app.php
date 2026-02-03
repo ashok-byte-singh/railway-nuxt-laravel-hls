@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->use([
             TrustProxies::class,
             HandleCors::class,
+            \App\Http\Middleware\ForceSameSiteNone::class,
         ]);
 
         /**
@@ -31,7 +32,6 @@ return Application::configure(basePath: dirname(__DIR__))
          */
         $middleware->api([
             EnsureFrontendRequestsAreStateful::class,
-            \App\Http\Middleware\ForceSameSiteNone::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
