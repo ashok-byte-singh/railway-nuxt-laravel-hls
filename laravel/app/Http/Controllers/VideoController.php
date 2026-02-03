@@ -21,6 +21,7 @@ class VideoController extends Controller
         $playlist = Storage::disk('s3')->get($path);
 
         $baseDir = trim(dirname($path), '.');
+        $bucket = (string) config('filesystems.disks.s3.bucket');
 
         // 3️⃣ Rewrite TS URLs → Cloudflare signed CDN URLs
         $playlist = preg_replace_callback(
@@ -32,7 +33,7 @@ class VideoController extends Controller
                     return $line;
                 }
 
-                $path = ltrim($baseDir . '/' . ltrim($line, '/'), '/');
+                $path = ltrim($bucket . '/' . $baseDir . '/' . ltrim($line, '/'), '/');
                 $ttl = (int) config('cdn.ttl_seconds', 900);
 
                 return CloudflareSignedUrl::signPath($path, $ttl);
