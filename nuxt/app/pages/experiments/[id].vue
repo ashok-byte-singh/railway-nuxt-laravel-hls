@@ -36,7 +36,7 @@ const videoSrc = ref(null)
 const { data: experiment, pending, error } = await useAsyncData(
   `experiment-${route.params.id}`,
  async () =>
-    await $fetch(`${apiBase}/experiments/${route.params.id}`, {
+    await $fetch(`${apiBase}/api/experiments/${route.params.id}`, {
       credentials: 'include',
       headers: { Accept: 'application/json' }
     }),
@@ -66,7 +66,7 @@ watch(
     if (!val) return
 
     const playlistText = await $fetch(
-      `${apiBase}/video/${route.params.id}`,
+      `${apiBase}/api/video/${route.params.id}`,
       {
         credentials: 'include',
         responseType: 'text'

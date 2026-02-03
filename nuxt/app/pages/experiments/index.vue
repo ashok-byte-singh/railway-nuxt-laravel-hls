@@ -34,10 +34,12 @@ const search = ref('')
     
     const search = ref('')
     
+    const { public: { apiBase } } = useRuntimeConfig()
+
     const { data: experiments, pending, error } = await useAsyncData(
       'experiments',
       () =>
-        $fetch('/api/experiments', {
+        $fetch(`${apiBase}/api/experiments`, {
           credentials: 'include', // 🔥 REQUIRED
           headers: {
             Accept: 'application/json'
