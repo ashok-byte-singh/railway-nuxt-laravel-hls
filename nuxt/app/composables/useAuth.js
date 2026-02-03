@@ -3,10 +3,11 @@ import { navigateTo } from '#app'
 export const useAuth = () => {
   const user = useState('user', () => null)
   const authLoaded = useState('authLoaded', () => false)
+  const { public: { apiBase } } = useRuntimeConfig()
 
   // 🔐 REQUIRED: initialize Sanctum CSRF cookie
   const initCsrf = async () => {
-    await $fetch('/sanctum/csrf-cookie', {
+    await $fetch(`${apiBase}/sanctum/csrf-cookie`, {
       credentials: 'include'
     })
   }
@@ -14,7 +15,7 @@ export const useAuth = () => {
   // 👤 Fetch authenticated user
   const fetchUser = async () => {
     try {
-      user.value = await $fetch('/api/me', {
+      user.value = await $fetch(`${apiBase}/me`, {
         credentials: 'include',
         headers: { Accept: 'application/json' }
       })
@@ -32,7 +33,7 @@ export const useAuth = () => {
     // 🔥 REQUIRED FOR SANCTUM
     await initCsrf()
 
-    await $fetch('/api/login', {
+    await $fetch(`${apiBase}/login`, {
       method: 'POST',
       credentials: 'include',
       headers: { Accept: 'application/json' },
@@ -52,7 +53,7 @@ export const useAuth = () => {
 
     // backend cleanup (non-blocking)
     try {
-      await $fetch('/api/logout', {
+      await $fetch(`${apiBase}/logout`, {
         method: 'POST',
         credentials: 'include'
       })
