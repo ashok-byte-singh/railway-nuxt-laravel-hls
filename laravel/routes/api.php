@@ -60,6 +60,10 @@ Route::get('/__session-config', function () {
         'domain' => config('session.domain'),
         'path' => config('session.path'),
         'cookie' => config('session.cookie'),
+        'env_same_site' => env('SESSION_SAME_SITE'),
+        'env_secure' => env('SESSION_SECURE_COOKIE'),
+        'env_driver' => env('SESSION_DRIVER'),
+        'config_cached' => app()->configurationIsCached(),
     ]);
 });
 
