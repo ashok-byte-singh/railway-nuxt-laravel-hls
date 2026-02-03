@@ -11,8 +11,6 @@ return [
 
     'allowed_origins' => [
         'https://virtuallab.uk',
-        'https://api.virtuallab.uk',
-        'https://railway-nuxt-laravel-hls-production.up.railway.app',
     ],
 
     'allowed_headers' => ['*'],
