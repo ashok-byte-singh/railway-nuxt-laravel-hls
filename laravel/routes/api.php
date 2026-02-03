@@ -97,10 +97,10 @@ Route::get('/minio-test', function () {
 Route::middleware(['web'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout'])
-        ->middleware('auth:sanctum');
+        ->middleware('auth');
 
     Route::get('/me', fn (Request $r) => $r->user())
-        ->middleware('auth:sanctum');
+        ->middleware('auth');
 
     Route::get('/hls/segment/{experiment}/{segment}', function (
         Experiment $experiment,
@@ -119,7 +119,7 @@ Route::middleware(['web'])->group(function () {
         );
     });
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth')->group(function () {
         Route::get('/experiments', function () {
             return Experiment::where('is_active', true)->get();
         });
