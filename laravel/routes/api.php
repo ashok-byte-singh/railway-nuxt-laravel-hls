@@ -52,6 +52,17 @@ Route::get('/__view-clear', function () {
     return 'view cleared';
 });
 
+Route::get('/__session-config', function () {
+    return response()->json([
+        'same_site' => config('session.same_site'),
+        'secure' => config('session.secure'),
+        'driver' => config('session.driver'),
+        'domain' => config('session.domain'),
+        'path' => config('session.path'),
+        'cookie' => config('session.cookie'),
+    ]);
+});
+
 /*
 |--------------------------------------------------------------------------
 | MinIO test (temporary)
