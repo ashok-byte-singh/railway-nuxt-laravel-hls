@@ -69,6 +69,8 @@ Route::middleware(['web'])->group(function () {
     });
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/me', fn (Request $r) => $r->user());
+
         Route::get('/experiments', function () {
             return Experiment::where('is_active', true)->get();
         });
