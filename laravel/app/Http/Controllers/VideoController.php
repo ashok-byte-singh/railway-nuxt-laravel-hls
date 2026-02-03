@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Experiment;
+use App\Services\CloudflareSignedUrl;
 use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
@@ -19,11 +20,22 @@ class VideoController extends Controller
         // 2️⃣ Read playlist
         $playlist = Storage::disk('s3')->get($path);
 
-        // 3️⃣ Rewrite TS URLs → Laravel proxy
+        $baseDir = trim(dirname($path), '.');
+
+        // 3️⃣ Rewrite TS URLs → Cloudflare signed CDN URLs
         $playlist = preg_replace_callback(
             '/^(?!#)(.+\.ts)$/m',
-            function ($m) use ($experiment) {
-                return url("/hls/segment/{$experiment->id}/" . trim($m[1]));
+            function ($m) use ($baseDir) {
+                $line = trim($m[1]);
+
+                if (str_starts_with($line, 'http://') || str_starts_with($line, 'https://')) {
+                    return $line;
+                }
+
+                $path = ltrim($baseDir . '/' . ltrim($line, '/'), '/');
+                $ttl = (int) config('cdn.ttl_seconds', 900);
+
+                return CloudflareSignedUrl::signPath($path, $ttl);
             },
             $playlist
         );
