@@ -64,6 +64,8 @@ Route::get('/__session-config', function () {
         'env_secure' => env('SESSION_SECURE_COOKIE'),
         'env_driver' => env('SESSION_DRIVER'),
         'config_cached' => app()->configurationIsCached(),
+        'cookie_provider_loaded' => app()->providerIsLoaded(App\Providers\CookieServiceProvider::class),
+        'app_provider_loaded' => app()->providerIsLoaded(App\Providers\AppServiceProvider::class),
     ]);
 });
 
