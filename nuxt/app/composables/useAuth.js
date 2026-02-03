@@ -15,7 +15,7 @@ export const useAuth = () => {
   // 👤 Fetch authenticated user
   const fetchUser = async () => {
     try {
-      user.value = await $fetch(`${apiBase}/me`, {
+      user.value = await $fetch(`${apiBase}/api/me`, {
         credentials: 'include',
         headers: { Accept: 'application/json' }
       })
@@ -33,7 +33,7 @@ export const useAuth = () => {
     // 🔥 REQUIRED FOR SANCTUM
     await initCsrf()
 
-    await $fetch(`${apiBase}/login`, {
+    await $fetch(`${apiBase}/api/login`, {
       method: 'POST',
       credentials: 'include',
       headers: { Accept: 'application/json' },
@@ -53,7 +53,7 @@ export const useAuth = () => {
 
     // backend cleanup (non-blocking)
     try {
-      await $fetch(`${apiBase}/logout`, {
+      await $fetch(`${apiBase}/api/logout`, {
         method: 'POST',
         credentials: 'include'
       })
