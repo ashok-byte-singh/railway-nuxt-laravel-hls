@@ -31,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
          */
         $middleware->api([
             EnsureFrontendRequestsAreStateful::class,
+            \App\Http\Middleware\ForceSameSiteNone::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
