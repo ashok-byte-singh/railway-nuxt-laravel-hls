@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\AuthController;
 
 Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
+
+
 Route::get('/__migrate', function () {
     \Artisan::call('migrate', ['--force' => true]);
     return 'migrated';
@@ -23,6 +25,31 @@ Route::get('/__migrate', function () {
 Route::get('/__seed', function () {
     \Artisan::call('db:seed', ['--force' => true]);
     return 'seeded';
+});
+
+Route::get('/__config-clear', function () {
+    \Artisan::call('config:clear');
+    return 'config cleared';
+});
+
+Route::get('/__cache-clear', function () {
+    \Artisan::call('cache:clear');
+    return 'cache cleared';
+});
+
+Route::get('/__route-clear', function () {
+    \Artisan::call('route:clear');
+    return 'route cleared';
+});
+
+Route::get('/__optimize-clear', function () {
+    \Artisan::call('optimize:clear');
+    return 'optimize cleared';
+});
+
+Route::get('/__view-clear', function () {
+    \Artisan::call('view:clear');
+    return 'view cleared';
 });
 
 /*
