@@ -69,6 +69,15 @@ Route::get('/__session-config', function () {
     ]);
 });
 
+Route::get('/__cdn-config', function () {
+    return response()->json([
+        'cdn_domain' => config('cdn.domain'),
+        'cdn_ttl' => config('cdn.ttl_seconds'),
+        'has_secret' => (bool) config('cdn.signing_secret'),
+        'bucket' => config('filesystems.disks.s3.bucket'),
+    ]);
+});
+
 /*
 |--------------------------------------------------------------------------
 | MinIO test (temporary)

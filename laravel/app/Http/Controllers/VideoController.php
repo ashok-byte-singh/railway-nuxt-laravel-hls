@@ -26,7 +26,7 @@ class VideoController extends Controller
         // 3️⃣ Rewrite TS URLs → Cloudflare signed CDN URLs
         $playlist = preg_replace_callback(
             '/^(?!#)(.+\.ts)$/m',
-            function ($m) use ($baseDir) {
+            function ($m) use ($baseDir, $bucket) {
                 $line = trim($m[1]);
 
                 if (str_starts_with($line, 'http://') || str_starts_with($line, 'https://')) {
