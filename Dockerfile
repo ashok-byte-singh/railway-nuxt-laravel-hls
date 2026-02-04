@@ -5,7 +5,7 @@ ARG NGINX_CONF=nginx.conf
 RUN apk add --no-cache \
     nginx supervisor curl git unzip \
     nodejs-current npm \
-    libpng-dev oniguruma-dev libxml2-dev
+    libpng-dev oniguruma-dev libxml2-dev postgresql-dev
 
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring bcmath gd opcache
 
