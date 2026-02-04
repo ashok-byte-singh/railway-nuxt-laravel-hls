@@ -7,7 +7,7 @@ RUN apk add --no-cache \
     nodejs-current npm \
     libpng-dev oniguruma-dev libxml2-dev
 
-RUN docker-php-ext-install pdo_mysql mbstring bcmath gd opcache
+RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring bcmath gd opcache
 
 # Force PHP-FPM TCP
 COPY laravel/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
