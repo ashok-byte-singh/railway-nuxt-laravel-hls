@@ -56,6 +56,7 @@ onBeforeUnmount(() => {
     preload="metadata"
     controlsList="nodownload noplaybackrate"
     disablePictureInPicture
+    @contextmenu.prevent
     style="width:100%; max-height:70vh; background:black;"
   />
 </template>
