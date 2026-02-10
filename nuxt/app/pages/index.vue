@@ -40,17 +40,17 @@ watch(theme, (val) => {
     </div>
     <header class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Interactive Science Platform</p>
+        <p class="eyebrow">Interactive Pharmacy Platform</p>
         <h1>
           Virtual <span class="accent">Lab</span>
         </h1>
         <p class="subhead">
-          Run experiments, watch guided demonstrations, and learn by doing.
-          Built for clarity, speed, and real understanding.
+          Run pharmacy simulations, watch guided demonstrations, and learn by doing.
+          Built for clarity, speed, and real clinical understanding.
         </p>
         <div class="cta">
           <NuxtLink to="/login" class="btn primary">Login</NuxtLink>
-          <NuxtLink to="/experiments" class="btn ghost">Explore Labs</NuxtLink>
+          <NuxtLink to="/experiments" class="btn ghost">Explore Pharmacy Labs</NuxtLink>
         </div>
         <div class="quick-links">
           <NuxtLink to="/service">Services</NuxtLink>
@@ -61,36 +61,36 @@ watch(theme, (val) => {
       <div class="hero-card">
         <div class="card-top">
           <span class="chip">Featured</span>
-          <span class="chip ghost">Physics</span>
+          <span class="chip ghost">Pharmacy</span>
         </div>
-        <h3>Ohm’s Law</h3>
-        <p>Visualize voltage, current, and resistance with guided steps.</p>
+        <h3>Dosage Calculations</h3>
+        <p>Practice dose, dilution, and infusion calculations step by step.</p>
         <div class="card-meta">
           <span>8 min</span>
-          <span>Beginner</span>
+          <span>Fundamentals</span>
         </div>
       </div>
     </header>
 
     <section class="grid">
       <div class="panel">
-        <h4>Guided Experiments</h4>
-        <p>Step-by-step procedures that mirror real lab workflows.</p>
+        <h4>Guided Simulations</h4>
+        <p>Step-by-step pharmacy workflows for safe, accurate practice.</p>
       </div>
       <div class="panel">
-        <h4>Video Demonstrations</h4>
-        <p>Stream optimized HLS lessons with clear narration.</p>
+        <h4>Clinical Demonstrations</h4>
+        <p>Stream concise pharmacy demos with clear narration.</p>
       </div>
       <div class="panel">
         <h4>Structured Outcomes</h4>
-        <p>Track objectives, observations, and results in one place.</p>
+        <p>Track objectives, calculations, and results in one place.</p>
       </div>
     </section>
 
     <section class="cta-band">
       <div>
-        <h2>Start your next experiment in minutes</h2>
-        <p>Access labs from anywhere with a single login.</p>
+        <h2>Start your next pharmacy lab in minutes</h2>
+        <p>Access simulations from anywhere with a single login.</p>
       </div>
       <NuxtLink to="/login" class="btn dark">Get Started</NuxtLink>
     </section>
